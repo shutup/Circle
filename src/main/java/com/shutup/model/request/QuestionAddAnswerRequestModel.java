@@ -1,13 +1,16 @@
 package com.shutup.model.request;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * Created by shutup on 2017/1/28.
  */
-public class CreateAnswerRequestModel {
+public class QuestionAddAnswerRequestModel {
     private Long userId;
+    @NotEmpty
     private String answer;
 
-    protected CreateAnswerRequestModel() {}
+    protected QuestionAddAnswerRequestModel() {}
 
     public Long getUserId() {
         return userId;

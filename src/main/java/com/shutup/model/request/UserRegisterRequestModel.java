@@ -3,15 +3,15 @@ package com.shutup.model.request;
 /**
  * Created by shutup on 2017/1/28.
  */
-public class RegisterUserRequestModel {
+public class UserRegisterRequestModel {
     private String username;
     private String password;
 
-    protected RegisterUserRequestModel(){
+    protected UserRegisterRequestModel(){
 
     }
 
-    public RegisterUserRequestModel(String username, String password) {
+    public UserRegisterRequestModel(String username, String password) {
         this.username = username;
         this.password = password;
     }

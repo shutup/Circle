@@ -9,27 +9,19 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by shutup on 2017/1/28.
+ * Created by shutup on 2017/4/2.
  */
 @Entity
-public class Answer {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Lob
-    private String answer;
+    private String comment;
 
     @OneToOne
     private User user;
-
-    @OneToMany(targetEntity = Comment.class)
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(targetEntity = User.class)
-    private List<User> agreedUsers = new ArrayList<>();
-    @OneToMany(targetEntity = User.class)
-    private List<User> disagreedUsers = new ArrayList<>();
 
     /** Model created at timestamp. */
 
@@ -41,12 +33,14 @@ public class Answer {
     @UpdateTimestamp
     private Date updatedAt;
 
-    protected Answer(){}
+    @OneToMany(targetEntity = User.class)
+    private List<User> agreedUsers = new ArrayList<>();
+    @OneToMany(targetEntity = User.class)
+    private List<User> disagreedUsers = new ArrayList<>();
+    @OneToMany(targetEntity = User.class)
+    private List<ReplyComment> replyComments = new ArrayList<>();
 
-    public Answer(String answer, User user) {
-        this.answer = answer;
-        this.user = user;
-    }
+    public Comment(){}
 
     public Long getId() {
         return id;
@@ -56,20 +50,12 @@ public class Answer {
         this.id = id;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getComment() {
+        return comment;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Date getCreatedAt() {
@@ -80,12 +66,12 @@ public class Answer {
         return updatedAt;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public User getUser() {
+        return user;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<User> getAgreedUsers() {
@@ -102,5 +88,21 @@ public class Answer {
 
     public void setDisagreedUsers(List<User> disagreedUsers) {
         this.disagreedUsers = disagreedUsers;
+    }
+
+//    public List<Comment> getComments() {
+//        return comments;
+//    }
+//
+//    public void setComments(List<Comment> comments) {
+//        this.comments = comments;
+//    }
+
+    public List<ReplyComment> getReplyComments() {
+        return replyComments;
+    }
+
+    public void setReplyComments(List<ReplyComment> replyComments) {
+        this.replyComments = replyComments;
     }
 }

@@ -35,7 +35,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
 
         return new ApiInfoBuilder()
-                .title("Spring Security Demo API")
+                .title("Circle Demo API")
                 .description("")
                 .version("1.0")
                 .build();

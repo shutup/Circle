@@ -13,4 +13,8 @@ public class CircleApplicationTests {
 	public void contextLoads() {
 	}
 
+	@Test
+	public void testRegister() {
+
+	}
 }

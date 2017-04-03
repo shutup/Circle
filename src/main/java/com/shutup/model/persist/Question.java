@@ -1,6 +1,5 @@
 package com.shutup.model.persist;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * Created by shutup on 2017/1/28.
  */
 @Entity
-public class Ask {
+public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -37,10 +36,15 @@ public class Ask {
     @UpdateTimestamp
     private Date updatedAt;
 
-    public Ask() {
+    @OneToMany(targetEntity = User.class)
+    private List<User> agreedUsers = new ArrayList<>();
+    @OneToMany(targetEntity = User.class)
+    private List<User> disagreedUsers = new ArrayList<>();
+
+    public Question() {
     }
 
-    public Ask(String question, User user) {
+    public Question(String question, User user) {
         this.question = question;
         this.user = user;
     }
@@ -83,5 +87,21 @@ public class Ask {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public List<User> getAgreedUsers() {
+        return agreedUsers;
+    }
+
+    public void setAgreedUsers(List<User> agreedUsers) {
+        this.agreedUsers = agreedUsers;
+    }
+
+    public List<User> getDisagreedUsers() {
+        return disagreedUsers;
+    }
+
+    public void setDisagreedUsers(List<User> disagreedUsers) {
+        this.disagreedUsers = disagreedUsers;
     }
 }
