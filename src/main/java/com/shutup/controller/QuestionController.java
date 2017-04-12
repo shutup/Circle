@@ -9,11 +9,13 @@ import com.shutup.model.request.QuestionAddCommentRequestModel;
 import com.shutup.repo.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.Servlet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +75,7 @@ public class QuestionController implements Constants{
         }
     }
 
-    @RequestMapping(path = {"/lists"},method = RequestMethod.GET)
+    @RequestMapping(path = {"/lists/user/"},method = RequestMethod.GET)
     public ResponseEntity<List<Question>> list(@RequestParam Long userId, @NotEmpty @RequestHeader String token) {
         UserStatus userStatus = userStatusRepo.findByToken(token);
         if (userStatus!=null) {
@@ -92,6 +94,17 @@ public class QuestionController implements Constants{
         }else {
             throw new CustomeException("user not found",false, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @RequestMapping(path = {"/lists"},method = RequestMethod.GET)
+    public ResponseEntity<Page<Question>> getTotalList(@NotEmpty @RequestHeader String token, @RequestParam(defaultValue = "0") int page) {
+        UserStatus userStatus = userStatusRepo.findByToken(token);
+        if (userStatus == null) {
+            throw new CustomeException("user not found",false, HttpStatus.UNAUTHORIZED);
+        }
+
+        Page<Question> result =  questionRepo.findAll(new PageRequest(page,10,new Sort(Sort.Direction.DESC,"createdAt")));
+        return ResponseEntity.ok(result);
     }
 
     @RequestMapping(path = {"/{questionId}/agree"},method = RequestMethod.GET)
