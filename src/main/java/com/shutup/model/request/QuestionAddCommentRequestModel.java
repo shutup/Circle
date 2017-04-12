@@ -28,4 +28,14 @@ public class QuestionAddCommentRequestModel {
         comment.setUser(user);
         return comment;
     }
+
+    public Comment createReplyComment(User user,User replyUser) {
+        Comment comment = new Comment();
+        comment.setComment(this.comment);
+        comment.setUser(user);
+        comment.setReply(true);
+        comment.setReplyUser(replyUser);
+        return comment;
+    }
+
 }

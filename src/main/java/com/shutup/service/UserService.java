@@ -37,7 +37,7 @@ public class UserService {
         User user = userRepo.findByUsername(userLoginRequestModel.getUsername());
         if (user!= null && user.getPassword().contentEquals(userLoginRequestModel.getPassword())) {
             UserStatus userState = userStatusService.CreateOrUpdateToken(user);
-            UserLoginResponseModel userLoginResponseModel = new UserLoginResponseModel(userState.getUser().getUsername(),userState.getToken());
+            UserLoginResponseModel userLoginResponseModel = new UserLoginResponseModel(user.getId(),userState.getUser().getUsername(),userState.getToken());
             return userLoginResponseModel;
         }else {
             return null;

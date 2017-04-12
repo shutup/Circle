@@ -23,6 +23,13 @@ public class Comment {
     @OneToOne
     private User user;
 
+    @OneToOne
+    private User replyUser;
+
+    private boolean isReply;
+
+
+
     /** Model created at timestamp. */
 
     @CreationTimestamp
@@ -37,8 +44,6 @@ public class Comment {
     private List<User> agreedUsers = new ArrayList<>();
     @OneToMany(targetEntity = User.class)
     private List<User> disagreedUsers = new ArrayList<>();
-    @OneToMany(targetEntity = User.class)
-    private List<ReplyComment> replyComments = new ArrayList<>();
 
     public Comment(){}
 
@@ -90,19 +95,19 @@ public class Comment {
         this.disagreedUsers = disagreedUsers;
     }
 
-//    public List<Comment> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(List<Comment> comments) {
-//        this.comments = comments;
-//    }
-
-    public List<ReplyComment> getReplyComments() {
-        return replyComments;
+    public User getReplyUser() {
+        return replyUser;
     }
 
-    public void setReplyComments(List<ReplyComment> replyComments) {
-        this.replyComments = replyComments;
+    public void setReplyUser(User replyUser) {
+        this.replyUser = replyUser;
+    }
+
+    public boolean isReply() {
+        return isReply;
+    }
+
+    public void setReply(boolean reply) {
+        isReply = reply;
     }
 }

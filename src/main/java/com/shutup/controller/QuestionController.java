@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.Servlet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class QuestionController implements Constants{
     }
 
     @RequestMapping(path = {"/{questionId}/answer/{answerId}/comment"},method = RequestMethod.POST)
-    public ResponseEntity<Answer> addComment(@NotEmpty @RequestHeader String token,
+    public ResponseEntity<Question> addComment(@NotEmpty @RequestHeader String token,
                            @RequestBody QuestionAddCommentRequestModel questionAddCommentRequestModel,
                            @PathVariable Long questionId,
                            @PathVariable Long answerId) {
@@ -140,7 +141,7 @@ public class QuestionController implements Constants{
         answer.getComments().add(newComment);
         Answer newAnswer = answerRepo.save(answer);
         if (newAnswer != null) {
-            return ResponseEntity.ok(newAnswer);
+            return ResponseEntity.ok(question);
         }else {
             throw new CustomeException("add comment failed",false,HttpStatus.NOT_FOUND);
         }
@@ -182,15 +183,50 @@ public class QuestionController implements Constants{
         return ResponseEntity.ok(question);
     }
 
-    @RequestMapping(path = {"/{questionId}/answer/{answerId}/comment/{commentId}/reply"},method = RequestMethod.GET)
+    @RequestMapping(path = {"/{questionId}/answer/{answerId}/comment/{commentId}/reply"},method = RequestMethod.POST)
     public ResponseEntity<Question> replyComment(@NotEmpty @RequestHeader String token,
                                                  @RequestBody QuestionAddCommentRequestModel questionAddCommentRequestModel,
                                                  @PathVariable Long questionId,
                                                  @PathVariable Long answerId,
                                                  @PathVariable Long commentId
     ) {
-        Question question = processAgreeAndDisagreeComment(token,questionId,answerId,commentId,STATE_DISAGREE);
-        return ResponseEntity.ok(question);
+        UserStatus userStatus = userStatusRepo.findByToken(token);
+        if (userStatus == null) {
+            throw new CustomeException("user not found",false, HttpStatus.UNAUTHORIZED);
+        }
+
+        Question question = questionRepo.findOne(questionId);
+        if (question == null) {
+            throw new CustomeException("question not found",false,HttpStatus.NOT_FOUND);
+        }
+
+        Answer answer = answerRepo.findOne(answerId);
+        if (answer == null) {
+            throw new CustomeException("answer not found",false,HttpStatus.NOT_FOUND);
+        }
+
+        if (!question.getAnswers().contains(answer)) {
+            throw new CustomeException("question and answer not match",false,HttpStatus.FAILED_DEPENDENCY);
+        }
+
+        Comment comment = commentRepo.findOne(commentId);
+        if (comment == null) {
+            throw new CustomeException("",false, HttpStatus.NOT_FOUND);
+        }
+
+        Comment replyComment = questionAddCommentRequestModel.createReplyComment(comment.getUser(),userStatus.getUser());
+        Comment newReplyComment = commentRepo.save(replyComment);
+        if (newReplyComment == null) {
+            throw new CustomeException("create reply comment failed",false, HttpStatus.FAILED_DEPENDENCY);
+        }
+
+        answer.getComments().add(replyComment);
+        Answer newAnswer = answerRepo.save(answer);
+        if (newAnswer != null) {
+            return ResponseEntity.ok(question);
+        }else {
+            throw new CustomeException("add comment failed",false,HttpStatus.NOT_FOUND);
+        }
     }
 
 

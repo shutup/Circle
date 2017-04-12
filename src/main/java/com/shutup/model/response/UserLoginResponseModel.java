@@ -4,6 +4,7 @@ package com.shutup.model.response;
  * Created by shutup on 2017/4/2.
  */
 public class UserLoginResponseModel {
+    private Long id;
     private String username;
     private String token;
 
@@ -12,11 +13,19 @@ public class UserLoginResponseModel {
 
     }
 
-    public UserLoginResponseModel(String username, String token) {
+    public UserLoginResponseModel(Long id,String username, String token) {
+        this.id = id;
         this.username = username;
         this.token = token;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
