@@ -3,6 +3,7 @@ package com.shutup.model.persist;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Date;
 @JsonIgnoreProperties(value = {"password"})
 public class User {
     @Column(unique = true)
+    @Length(min = 2,max = 10)
     private String username;
     private String password;
 

@@ -254,9 +254,19 @@ public class QuestionController implements Constants{
             throw new CustomeException("question not found",false,HttpStatus.NOT_FOUND);
         }
         if (state == STATE_AGREE) {
-            question.getAgreedUsers().add(userStatus.getUser());
+            if (question.getAgreedUsers().contains(userStatus.getUser())) {
+                question.getAgreedUsers().remove(userStatus.getUser());
+            }else {
+                question.getAgreedUsers().add(userStatus.getUser());
+                question.getDisagreedUsers().remove(userStatus.getUser());
+            }
         }else if (state == STATE_DISAGREE) {
-            question.getDisagreedUsers().add(userStatus.getUser());
+            if (question.getDisagreedUsers().contains(userStatus.getUser())) {
+                question.getDisagreedUsers().remove(userStatus.getUser());
+            }else {
+                question.getDisagreedUsers().add(userStatus.getUser());
+                question.getAgreedUsers().remove(userStatus.getUser());
+            }
         }
         Question newQuestion = questionRepo.save(question);
         if (newQuestion != null) {
@@ -281,9 +291,19 @@ public class QuestionController implements Constants{
         }
 
         if (state == STATE_AGREE) {
-            answer.getAgreedUsers().add(userStatus.getUser());
+            if (answer.getAgreedUsers().contains(userStatus.getUser())) {
+                answer.getAgreedUsers().remove(userStatus.getUser());
+            }else {
+                answer.getAgreedUsers().add(userStatus.getUser());
+                answer.getDisagreedUsers().remove(userStatus.getUser());
+            }
         }else if (state == STATE_DISAGREE) {
-            answer.getDisagreedUsers().add(userStatus.getUser());
+            if (answer.getDisagreedUsers().contains(userStatus.getUser())) {
+                answer.getDisagreedUsers().remove(userStatus.getUser());
+            }else {
+                answer.getAgreedUsers().remove(userStatus.getUser());
+                answer.getDisagreedUsers().add(userStatus.getUser());
+            }
         }
 
         Answer newAnswer = answerRepo.save(answer);
@@ -314,9 +334,19 @@ public class QuestionController implements Constants{
         }
 
         if (state == STATE_AGREE) {
-            comment.getAgreedUsers().add(userStatus.getUser());
+            if (comment.getAgreedUsers().contains(userStatus.getUser())) {
+                comment.getAgreedUsers().remove(userStatus.getUser());
+            }else {
+                comment.getAgreedUsers().add(userStatus.getUser());
+                comment.getDisagreedUsers().remove(userStatus.getUser());
+            }
         }else if (state == STATE_DISAGREE) {
-            comment.getDisagreedUsers().add(userStatus.getUser());
+            if (comment.getDisagreedUsers().contains(userStatus.getUser())) {
+                comment.getDisagreedUsers().remove(userStatus.getUser());
+            }else {
+                comment.getDisagreedUsers().add(userStatus.getUser());
+                comment.getAgreedUsers().remove(userStatus.getUser());
+            }
         }
 
         Comment newComment = commentRepo.save(comment);
