@@ -26,9 +26,9 @@ public class Answer {
     @OneToMany(targetEntity = Comment.class)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(targetEntity = User.class)
+    @ManyToMany(targetEntity = User.class)
     private List<User> agreedUsers = new ArrayList<>();
-    @OneToMany(targetEntity = User.class)
+    @ManyToMany(targetEntity = User.class)
     private List<User> disagreedUsers = new ArrayList<>();
 
     /** Model created at timestamp. */

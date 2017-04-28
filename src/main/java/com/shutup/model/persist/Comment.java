@@ -40,9 +40,9 @@ public class Comment {
     @UpdateTimestamp
     private Date updatedAt;
 
-    @OneToMany(targetEntity = User.class)
+    @ManyToMany(targetEntity = User.class)
     private List<User> agreedUsers = new ArrayList<>();
-    @OneToMany(targetEntity = User.class)
+    @ManyToMany(targetEntity = User.class)
     private List<User> disagreedUsers = new ArrayList<>();
 
     public Comment(){}

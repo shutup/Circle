@@ -7,6 +7,7 @@ import com.shutup.model.request.QuestionAddAnswerRequestModel;
 import com.shutup.model.request.CreateQuestionRequestModel;
 import com.shutup.model.request.QuestionAddCommentRequestModel;
 import com.shutup.repo.*;
+import org.hibernate.jpa.internal.EntityManagerImpl;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -268,6 +270,7 @@ public class QuestionController implements Constants{
                 question.getAgreedUsers().remove(userStatus.getUser());
             }
         }
+
         Question newQuestion = questionRepo.save(question);
         if (newQuestion != null) {
             return newQuestion;
