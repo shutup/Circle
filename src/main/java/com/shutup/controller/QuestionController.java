@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -98,8 +99,27 @@ public class QuestionController implements Constants{
         }
     }
 
+    @RequestMapping(path = {"/listsBy"},method = RequestMethod.GET)
+    public ResponseEntity<Page<Question>> getTotalListByUsersCount(@NotEmpty @RequestHeader String token,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam boolean isAgree) {
+        UserStatus userStatus = userStatusRepo.findByToken(token);
+        if (userStatus == null) {
+            throw new CustomeException("user not found",false, HttpStatus.UNAUTHORIZED);
+        }
+        Page<Question> result;
+        if (isAgree) {
+
+         result =  questionRepo.findByAgreedUsers(new PageRequest(page,10));
+        }else {
+         result =  questionRepo.findByDisagreedUsers(new PageRequest(page,10));
+        }
+        return ResponseEntity.ok(result);
+    }
+
     @RequestMapping(path = {"/lists"},method = RequestMethod.GET)
-    public ResponseEntity<Page<Question>> getTotalList(@NotEmpty @RequestHeader String token, @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<Page<Question>> getTotalList(@NotEmpty @RequestHeader String token,
+                                                       @RequestParam(defaultValue = "0") int page) {
         UserStatus userStatus = userStatusRepo.findByToken(token);
         if (userStatus == null) {
             throw new CustomeException("user not found",false, HttpStatus.UNAUTHORIZED);
@@ -108,6 +128,7 @@ public class QuestionController implements Constants{
         Page<Question> result =  questionRepo.findAll(new PageRequest(page,10,new Sort(Sort.Direction.DESC,"createdAt")));
         return ResponseEntity.ok(result);
     }
+
 
     @RequestMapping(path = {"/{questionId}/agree"},method = RequestMethod.GET)
     public ResponseEntity<Question> agreeQuestion(@NotEmpty @RequestHeader String token,
