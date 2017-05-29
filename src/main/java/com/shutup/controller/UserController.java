@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by shutup on 2017/1/28.
  */
 @RestController
-@RequestMapping(path = {"/user"})
+@RequestMapping(path = {"/v1"})
 public class UserController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(path = {"/register"},method = RequestMethod.POST)
+    @RequestMapping(path = {"/users"},method = RequestMethod.POST)
     public ResponseEntity<User> register(@RequestBody UserRegisterRequestModel registerUserRequestModel) {
         User user = userService.Register(registerUserRequestModel);
         if (user != null) {
@@ -38,7 +38,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = {"/login"},method = RequestMethod.POST)
+    @RequestMapping(path = {"/users/login"},method = RequestMethod.POST)
     public ResponseEntity<UserLoginResponseModel> login(@RequestBody UserLoginRequestModel userLoginRequestModel) {
         UserLoginResponseModel userLoginResponseModel = userService.Login(userLoginRequestModel);
         if (userLoginResponseModel != null) {
